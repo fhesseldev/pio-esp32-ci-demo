@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ ! -d /sys/class/gpio/gpio17 ]; then
+	echo 17 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio17/direction
+	echo 1 > /sys/class/gpio/gpio17/value
+fi
+
+if [ ! -d /sys/class/gpio/gpio18 ]; then
+	echo 18 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio18/direction
+	echo 1 > /sys/class/gpio/gpio18/value
+fi
+
+if [[ "$1" == "bootloader" ]]; then
+	echo 0 > /sys/class/gpio/gpio18/value
+	sleep 0.1
+	echo 0 > /sys/class/gpio/gpio17/value
+	sleep 0.1
+	echo 1 > /sys/class/gpio/gpio17/value
+	sleep 0.1
+	echo 1 > /sys/class/gpio/gpio18/value
+	sleep 0.1
+elif [[ "$1" == "reset" ]]; then
+	echo 1 > /sys/class/gpio/gpio18/value
+	echo 0 > /sys/class/gpio/gpio17/value
+	sleep 0.1
+	echo 1 > /sys/class/gpio/gpio17/value
+	sleep 0.1
+else
+	echo "Usage: espreset [bootloader|reset]"
+fi

@@ -1,0 +1,14 @@
+{
+  "name": "pio-esp32-ci-demo",
+  "keywords": "esp32, continuous-integration",
+  "description": "A demo project showing how to setup CI for an ESP32 library on real hardware with GitHub Actions and PlatformIO.",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/fhessel/pio-esp32-ci-demo.git"
+  },
+  "license": "MIT",
+  "version": "0.0.1",
+  "frameworks": "arduino",
+  "platforms": ["espressif32"]
+}
