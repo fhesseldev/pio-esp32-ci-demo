@@ -38,12 +38,15 @@ else
 		PORT="/dev/ttyS0"
 	fi
 	# We use chip_id as dummy command
+	RES=1
 	if [[ "$1" == "bootloader" ]]; then
-		esptool --port "$PORT" --before default_reset --after no_reset chip_id
+		esptool --port "$PORT" --before default_reset --after no_reset chip_id > /dev/null
+		RES=$?
 	elif [[ "$1" == "reset" ]]; then
-		esptool --port "$PORT" --before default_reset --after hard_reset chip_id
+		esptool --port "$PORT" --before default_reset --after hard_reset chip_id > /dev/null
+		RES=$?
 	else
 		echo "Usage: espreset [bootloader|reset]"
 	fi
+	exit $RES
 fi
-

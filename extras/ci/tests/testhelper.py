@@ -68,6 +68,7 @@ class ESPTestCase(unittest.TestCase):
       time.sleep(3)
     except:
       self.tearDown()
+      raise
 
   def tearDown(self):
     # Stop the thread
