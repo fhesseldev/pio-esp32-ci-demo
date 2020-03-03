@@ -60,9 +60,8 @@ class ESPTestCase(unittest.TestCase):
     self._esp_ip = None
     self._serial_active = True
     self._serial_thread = threading.Thread(target=self._serThread,daemon=True)
-    self._serial_thread.start()
-    time.sleep(0.5)
     self.esp_reset(False)
+    self._serial_thread.start()
     self.assertTrue(self._wifi_ready.wait(15),
       "Did not get a WiFi connection in 15 seconds")
     time.sleep(3)
