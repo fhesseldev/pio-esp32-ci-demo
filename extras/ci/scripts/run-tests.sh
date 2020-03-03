@@ -18,4 +18,4 @@ export TESTSDIR="$CIBASEDIR/extras/ci/tests"
 export APPSDIR="$CIBASEDIR/extras/ci/apps"
 
 # Start the integration test
-python -m unittest discover "$TESTSDIR" "*_test.py"
+python3 -m unittest discover "$TESTSDIR" "*_test.py"
