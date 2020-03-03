@@ -28,11 +28,13 @@ class ESPTestCase(unittest.TestCase):
       os.symlink(os.environ['CIBASEDIR'], liblink, True)
     self.esp_reset(True)
     print("Uploading %s to %s" % (appname, self._port))
-    upload = subprocess.Popen([
-      "pio", "run",
+    args = ["pio", "run",
       "-t", "upload",
       "-d", self._appdir,
-      "--upload-port", self._port])
+      "--upload-port", self._port]
+    if 'PIOENV' in os.environ:
+      args.extend(['-e', os.environ['PIOENV']])
+    upload = subprocess.Popen(args)
     res = upload.wait()
     self.assertEqual(res, 0, "Could not install %s" % appname)
     self.esp_reset(False)
