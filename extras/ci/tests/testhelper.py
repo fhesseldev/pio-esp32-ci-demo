@@ -116,7 +116,10 @@ class ESPTestCase(unittest.TestCase):
         else:
           time.sleep(0.05)
           resetcount = max(0, resetcount - 3)
+      if linebuf != b'':
+        print(linebuf.decode('utf8',errors='ignore'))
     finally:
       print("ESP32: <serial connection closed>")
+      print()
       self._serial_active = False
       self._serial_thread = None
