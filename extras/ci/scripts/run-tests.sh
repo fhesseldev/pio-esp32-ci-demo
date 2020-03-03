@@ -10,7 +10,12 @@ WIFI_PSK="$(grep wpa_passphrase /etc/hostapd/hostapd.conf | sed -E 's/wpa_passph
 export PLATFORMIO_BUILD_FLAGS="-DWIFI_SSID=\\\"$WIFI_SSID\\\" -DWIFI_PSK=\\\"$WIFI_PSK\\\""
 
 # Serial port on GPIO header of the Rasperry Pi
-export PORT="/dev/ttyS0"
+if [ ! -c "$PORT" ]; then
+  echo "Invalid PORT (\"$PORT\"), falling back to default (\"/dev/ttyS0\")"
+  export PORT="/dev/ttyS0"
+else
+  export PORT="$PORT"
+fi
 
 # Define some directories
 export CIBASEDIR="$(pwd)"
