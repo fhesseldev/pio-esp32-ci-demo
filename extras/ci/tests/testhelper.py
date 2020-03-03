@@ -55,16 +55,19 @@ class ESPTestCase(unittest.TestCase):
     if INSTALLED_APP != self.appname:
       self.esp_install_app(self.appname)
       INSTALLED_APP = self.appname
-    self._serial = serial.Serial(self._port, 115200, timeout = 0.1)
-    print("ESP32: <opened serial connection on %s>" % self._port)
-    self._esp_ip = None
-    self._serial_active = True
-    self._serial_thread = threading.Thread(target=self._serThread,daemon=True)
     self.esp_reset(False)
-    self._serial_thread.start()
-    self.assertTrue(self._wifi_ready.wait(15),
-      "Did not get a WiFi connection in 15 seconds")
-    time.sleep(3)
+    self._serial = serial.Serial(self._port, 115200, timeout = 0.1)
+    try:
+      print("ESP32: <opened serial connection on %s>" % self._port)
+      self._esp_ip = None
+      self._serial_active = True
+      self._serial_thread = threading.Thread(target=self._serThread,daemon=True)
+      self._serial_thread.start()
+      self.assertTrue(self._wifi_ready.wait(15),
+        "Did not get a WiFi connection in 15 seconds")
+      time.sleep(3)
+    except:
+      self.tearDown()
 
   def tearDown(self):
     # Stop the thread
