@@ -10,3 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: ./extras/ci/scripts/build-examples.sh
+  run-tests:
+    runs-on: self-hosted
+    needs: build-examples
+    steps:
+    - uses: actions/checkout@v2
+    - run: ./extras/ci/scripts/run-tests.sh

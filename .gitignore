@@ -1,2 +1,10 @@
+# Visual Studio Code files
 .vscode
+# Output folder used during build tests
 .tmp
+# Python cache created during integration tests
+__pycache__
+# PlatformIO build folder created during tests
+.pio
+# symbolic links created by the build script
+**/lib/cilib

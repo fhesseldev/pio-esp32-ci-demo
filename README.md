@@ -16,8 +16,8 @@ We assume you have installed [Raspbian lite](https://www.raspberrypi.org/downloa
 The setup section is structured as follows:
 
 - Wiring between Raspberry Pi and ESP32
-- Install helpful tools
-- Installation of Platform IO
+- Create user and install required build tools
+- Setup WiFi Access Point for the tests
 - Setup of GitHub Action Runner
 - Creating the actions
 
@@ -44,7 +44,7 @@ If not done yet, run `sudo raspi-config`, go to the peripherals section, disable
 When asked if the serial port should be made available, select *yes* and reboot.
 Now, you can access the serial port your ESP32 on `/dev/ttyS0`, e.g. by running `miniterm /dev/ttyS0 115200`.
 
-### Install Tools
+### Create User and Install Tools
 
 Install python, support for virtual environments, ...
 
@@ -70,6 +70,80 @@ The basic skeleton of the home directory's contents is available under `extras/s
 
 Copy it to the files from the repository to the home directory of that user (caution: also the hidden files like .bashrc).
 Then run `setup.sh` to create virtual environments and download additional software.
+
+### Setup WiFi Access Point for the Tests
+
+> **Note:** This is a short version of the description in the [official docs](https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md).
+
+Install `hostapd` (wireless access point), `dnsmasq` (DHCP server) and `pwgen` (used for key generation). Use a sudo-user for this, not your `esptest` user:
+
+```bash
+sudo apt-get update
+sudo apt-get -y install pwgen hostapd dnsmasq
+```
+
+Stop the services to configure them:
+
+```bash
+sudo systemctl stop dnsmasq
+sudo systemctl stop hostapd
+```
+
+Check the name of your WiFi interface. Run the following command ...
+
+```bash
+ip addr
+```
+
+... and check for a line like this ...
+
+```
+3: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN group default qlen 1000
+```
+
+... where `wlan0` is the interface name you need. Then edit `/etc/dhcpcd.conf` and add:
+
+```
+interface wlan0
+    static ip_address=192.168.42.1/24
+    nohook wpa_supplicant
+```
+
+Make sure to use the interface name that you've found before and use an IP address that is not in use in your local network.
+If you pick a different address (not `192.168.42.1`), make sure to replace it in the following files.
+
+Replace `/etc/dnsmasq.conf` by the following file (or copy it from [here](extras/setup/dnsmasq.conf)):
+
+```
+interface=wlan0
+dhcp-range=192.168.42.2,192.168.42.20,255.255.255.0,24h
+```
+
+Copy the sample [`hostapd.conf`](extras/setup/hostapd.conf) file to `/etc/hostapd/hostapd.conf` and make sure to set a secure password.
+You can create one by running:
+
+```bash
+pwgen -s 63 1
+```
+
+Tell the system about the configuration file by editing `/etc/hostapd/hostapd` and adding this line:
+
+```
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+```
+
+Now start everything:
+
+```bash
+sudo systemctl restart dhcpcd
+sudo systemctl start dnsmasq
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
+```
+
+This is sufficient to test communication between your ESP32 and the Raspberry Pi.
+If you, however, need outbound traffic from the ESP32 to the Internet or another network, you need to follow the steps under *Add routing and masquarade* and *Using the Raspberry Pi as an access point to share an internet connection (bridge)* in the [Access Point on Raspberry Pi Documentation](https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md).
 
 ### Setup GitHub Action Runner
 
