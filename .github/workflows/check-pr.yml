@@ -1,0 +1,21 @@
+name: Continuous Integration (PR Review)
+
+on:
+  pull_request_review:
+    types: [submitted]
+jobs:
+  build-examples:
+    runs-on: self-hosted
+    if: github.event.review.author_association == 'OWNER' && github.event.review.state == 'APPROVED'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build all examples
+      run: ./extras/ci/scripts/build-examples.sh
+  run-tests:
+    runs-on: self-hosted
+    if: github.event.review.author_association == 'OWNER' && github.event.review.state == 'APPROVED'
+    needs: build-examples
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run test cases on hardware
+      run: ./extras/ci/scripts/run-tests.sh

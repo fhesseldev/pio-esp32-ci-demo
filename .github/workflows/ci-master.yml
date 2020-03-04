@@ -1,9 +1,8 @@
-name: CI
+name: Continuous Integration (master)
 
 on:
   push:
     branches: master
-
 jobs:
   build-examples:
     runs-on: self-hosted
