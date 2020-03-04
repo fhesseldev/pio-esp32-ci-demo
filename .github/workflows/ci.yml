@@ -9,10 +9,12 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
-    - run: ./extras/ci/scripts/build-examples.sh
+    - name: Build all examples
+      run: ./extras/ci/scripts/build-examples.sh
   run-tests:
     runs-on: self-hosted
     needs: build-examples
     steps:
     - uses: actions/checkout@v2
-    - run: ./extras/ci/scripts/run-tests.sh
+    - name: Run test cases on hardware
+      run: ./extras/ci/scripts/run-tests.sh
