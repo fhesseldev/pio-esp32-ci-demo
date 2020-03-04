@@ -20,8 +20,9 @@ jobs:
     - name: Run test cases on hardware
       run: ./extras/ci/scripts/run-tests.sh
   remove-label:
+    runs-on: self-hosted
+    steps:
     - uses: octokit/request-action@v2.0.0
-      id: get_latest_release
       with:
         route: DELETE /repos/:repository/issues/:issue_number/labels/:name
         repository: ${{ github.repository }}
@@ -29,4 +30,4 @@ jobs:
         name: 'CI - Ready to run'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Remove CI Label from PR
+      name: Remove CI Label from PR
