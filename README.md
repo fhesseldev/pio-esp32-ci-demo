@@ -1,5 +1,7 @@
 # pio-esp32-ci-demo
 
+![Continuous Integration](https://github.com/fhessel/pio-esp32-ci-demo/workflows/Continuous%20Integration/badge.svg)
+
 A demo project showing how to setup CI for an ESP32 library on real hardware with GitHub Actions and PlatformIO.
 
 **You will need:**
