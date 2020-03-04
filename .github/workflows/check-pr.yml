@@ -6,14 +6,14 @@ on:
 jobs:
   build-examples:
     runs-on: self-hosted
-    if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run')
+    if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run' )
     steps:
     - uses: actions/checkout@v2
     - name: Build all examples
       run: ./extras/ci/scripts/build-examples.sh
   run-tests:
     runs-on: self-hosted
-    if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run')
+    if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run' )
     needs: build-examples
     steps:
     - uses: actions/checkout@v2
