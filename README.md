@@ -156,3 +156,4 @@ Select *ARM* as architecture and follow the instructions below.
 Make sure to log in as the `esptest` user, and create the folder in the first step as `/home/esptest/apps/actions-runner`.
 
 More information is available [on GitHub Help](https://help.github.com/en/actions/hosting-your-own-runners).
+
