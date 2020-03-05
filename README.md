@@ -273,7 +273,7 @@ Then configure the rule like shown in this screenshot.
 
 > **Note:** You may need to create a dummy PR and label it for all options to appear here.
 
-![Branch Protection Rule](https://github.com/fhessel/pio-esp32-ci-demo/blob/master/extras/assets/branch-protection?raw=true)
+![Branch Protection Rule](https://github.com/fhessel/pio-esp32-ci-demo/blob/master/extras/assets/branch-protection.png?raw=true)
 
 Now, every PR should require the PR-Workflow to run before merging.
 You can trigger the workflow by adding the `CI - Ready to run` label, the Actions Bot will remove it again.
