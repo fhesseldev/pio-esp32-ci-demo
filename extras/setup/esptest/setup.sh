@@ -2,7 +2,6 @@
 
 set -e
 
-echo "PATH=\"\$HOME/bin:\$PATH\"" >> /home/esptest/.bashrc
 mkdir -p /home/esptest/bin
 mkdir -p /home/esptest/apps
 

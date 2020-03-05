@@ -173,24 +173,24 @@ Make sure that the `User` entry is set to `esptest` in `/etc/systemd/system/acti
 As the configuration of the ESP32 board (serial port, board type, ...) are not repository-specific but runner-specific, we do not configure them in the workflow but on the local machine.
 
 All of the following settings are optional, they default to using a WROVER board with 16MB flash and the GPIOs to communicate with the ESP32.
-If you want to enable them, enter them at the end of `/home/esptest/.bashrc`.
+If you want to enable them, enter them in the `[Service]` section of `/etc/systemd/system/actions.runner.<...>`.
 
 **Other board**: This setting relates to the PlatformIO build environment that is used to build the applications during hardware test. See [`extras/ci/apps/chat-server/platformio.ini`](extras/ci/apps/chat-server/platformio.ini) for the differences.
 
-```bash
-export PIOENV=wroom
+```
+Environment="PIOENV=wroom"
 ```
 
 **Serial Port**: Use a different serial port. Defaults to `/dev/ttyS0`
 
-```bash
-export PORT=/dev/ttyUSB0
+```
+Environment="PORT=/dev/ttyUSB0"
 ```
 
 **Reset Method**: Use esptool instead of GPIO reset (required if you connect a DevBoard with integrated reset circuit, you most likely need to change the serial port as well)
 
-```bash
-export ESPRESETTOOL=esptool
+```
+Environment="ESPRESETTOOL=esptool"
 ```
 
 ### Creating the Actions
@@ -256,12 +256,18 @@ The trigger is any push to the master branch.
 **PR Workflow:** Currently, it is not possible to trigger a workflow manually on a commit.
 Therefore, we need to create a workaround that allows us to review a PR before we pass it to the runner, to prevent the previously menitoned security issues.
 We exploit issue lables to reach that goal.
-This workflow does the same as the master workflow, but is triggered when a label is set on a pull-request and the `CI - Ready to run` label on that pull request is set.
+This workflow does the same as the master workflow, but is triggered when a label is set on a pull-request and the `CI - Ready to run` label (make sure to create that label, with this exact name) on that pull request is set.
 While *Pull-Request* and *label added* are things which can be checked on workflow level, the label list has to be checked in each step.
 Furthermore, it is not possible to know *which* label was added.
 Therefore, and to allow re-checking a PR after changes, we add an additional step that removes the label just after the workflow has started.
 This way, the CI runs for latest commit in the PR and only that commit will be marked as valid.
 Also, adding labels is an action which can only be done by known users, which makes this action as secure as it can get.
+
+You should check the PR twice before adding the CI label, if ...
+- The `.github/workflows` folder is modified
+- The `extras/ci` folder is modified
+  - In particular, if the `scripts` subfolder is modified
+  - New tests also have to be revised. Python allows easy integration testing of, e.g., a REST APIs on the ESP32, but is powerful and is not limited to communication with your ESP32 but can do anything on the system.
 
 ### Configuring the Repositry
 
