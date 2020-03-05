@@ -1,5 +1,7 @@
 # pio-esp32-ci-demo
 
+![Continuous Integration](https://github.com/fhessel/pio-esp32-ci-demo/workflows/Continuous%20Integration/badge.svg)
+
 A demo project showing how to setup CI for an ESP32 library on real hardware with GitHub Actions and PlatformIO.
 
 **You will need:**
@@ -154,3 +156,4 @@ Select *ARM* as architecture and follow the instructions below.
 Make sure to log in as the `esptest` user, and create the folder in the first step as `/home/esptest/apps/actions-runner`.
 
 More information is available [on GitHub Help](https://help.github.com/en/actions/hosting-your-own-runners).
+
