@@ -1,8 +1,7 @@
 name: Continuous Integration (PR Review)
 
 on:
-  pull_request:
-    types: [labeled]
+  pull_request
 jobs:
   build-examples:
     runs-on: self-hosted
@@ -10,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build all examples
-      run: ./extras/ci/scripts/build-examples.sh
+      run: "echo '##debug##foo'"
   run-tests:
     runs-on: self-hosted
     if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run' )
@@ -18,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run test cases on hardware
-      run: ./extras/ci/scripts/run-tests.sh
+      run: "echo '##debug##bar'"
   remove-label:
     runs-on: self-hosted
     if: contains( github.event.pull_request.labels.*.name, 'CI - Ready to run' )
